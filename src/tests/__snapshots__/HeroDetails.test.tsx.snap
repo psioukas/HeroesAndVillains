@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Expect Snapshot to match 1`] = `
+<div
+  className="MuiBox-root css-10jbkkq"
+  data-testid="hero-details-view"
+>
+  <div
+    className="MuiBox-root css-3wml6g"
+    style={
+      Object {
+        "alignSelf": "center",
+      }
+    }
+  >
+    <img
+      alt="hero avatar"
+      height={94}
+      src="http://www.google.com/images/wtv"
+      width={94}
+    />
+  </div>
+  <p
+    className="MuiTypography-root MuiTypography-body1 css-rfvo0n-MuiTypography-root"
+  >
+    Full Metal
+  </p>
+  <p
+    className="MuiTypography-root MuiTypography-body2 css-16ucqvx-MuiTypography-root"
+  >
+    human
+  </p>
+  <p
+    className="MuiTypography-root MuiTypography-body2 css-147ip0x-MuiTypography-root"
+  >
+    dangerous
+  </p>
+  <button
+    className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-disableElevation MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-disableElevation btnDelete css-176uzx2-MuiButtonBase-root-MuiButton-root"
+    disabled={false}
+    onBlur={[Function]}
+    onClick={[Function]}
+    onContextMenu={[Function]}
+    onDragLeave={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+    onMouseDown={[Function]}
+    onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
+    onTouchStart={[Function]}
+    tabIndex={0}
+    type="button"
+  >
+    <span
+      className="MuiButton-startIcon MuiButton-iconSizeMedium css-1d6wzja-MuiButton-startIcon"
+    >
+      <svg
+        aria-hidden={true}
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        data-testid="DeleteIcon"
+        focusable="false"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+        />
+      </svg>
+    </span>
+    Delete hero
+  </button>
+</div>
+`;
