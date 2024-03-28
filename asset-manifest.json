@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/heroes-frontend/static/css/main.da832a12.css",
+    "main.js": "/heroes-frontend/static/js/main.ac480f66.js",
+    "index.html": "/heroes-frontend/index.html",
+    "main.da832a12.css.map": "/heroes-frontend/static/css/main.da832a12.css.map",
+    "main.ac480f66.js.map": "/heroes-frontend/static/js/main.ac480f66.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.da832a12.css",
+    "static/js/main.ac480f66.js"
+  ]
+}
