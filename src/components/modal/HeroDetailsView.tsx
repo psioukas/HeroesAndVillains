@@ -43,8 +43,10 @@ const HeroDetailsView = () => {
         Store.notification.show('Please wait deleting hero', 'info');
         setTimeout(() => {
         Store.deleteHero(hero);
-        Store.notification.show('Hero deleted successfully', 'success');
-        }, 1800);
+            setTimeout(() => {
+                Store.notification.show('Hero deleted successfully', 'success');
+            }, 100);
+        }, 1100);
     };
 
     return hero ? (
