@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import {Alert, AlertColor, Box, BoxProps, IconButton, Snackbar, useMediaQuery,} from '@mui/material';
+import {Alert, AlertColor, Box, BoxProps, IconButton, Snackbar, Typography, useMediaQuery,} from '@mui/material';
 import {styled, Theme} from '@mui/material/styles';
 import {observer} from 'mobx-react-lite';
 import {useEffect, useState} from 'react';
@@ -39,6 +39,9 @@ const App = () => {
     }, []);
 
     return (<StyledApp>
+        <Typography variant={'h1'} color={'#65cd95'}>
+            Heroes App
+        </Typography>
         {!showErrorPage ? (<>
                     <Snackbar
                         open={Store.notification.isVisible}
