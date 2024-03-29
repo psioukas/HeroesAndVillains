@@ -1,14 +1,7 @@
-import {
-    applySnapshot,
-    getRoot,
-    IAnyStateTreeNode,
-    Instance,
-    SnapshotIn,
-    SnapshotOut,
-    types,
-} from 'mobx-state-tree';
-import { baseApiUrl } from '../utils/HeroApiRequests';
-import { IHero, IHeroType } from './../types/index';
+import {applySnapshot, getRoot, IAnyStateTreeNode, Instance, SnapshotIn, SnapshotOut, types,} from 'mobx-state-tree';
+import {baseApiUrl} from '../utils/HeroApiRequests';
+import {IHero, IHeroType} from './../types/index';
+import {v4} from "uuid";
 
 const Modal = types
     .model('Modal', {
@@ -38,8 +31,8 @@ const Notification = types
     }));
 const Modals = types
     .model('Modals', {
-        addHero: types.optional(Modal, { visible: false, title: '' }),
-        heroDetails: types.optional(Modal, { visible: false, title: '' }),
+        addHero: types.optional(Modal, {visible: false, title: ''}),
+        heroDetails: types.optional(Modal, {visible: false, title: ''}),
     })
     .views(self => ({
         get activeModalTitle() {
@@ -97,7 +90,7 @@ const RootStore = types
         loading: types.optional(types.boolean, true),
         modals: Modals,
         heroes: types.optional(types.array(Hero), []),
-        heroTypes: types.optional(types.array(HeroType), []),
+        heroTypes: types.optional(types.array(HeroType), [{id: v4(),name:'Hero'},{id:v4(),name:'Villain'}]),
         selectedHeroId: types.optional(types.string, ''),
         notification: Notification,
     })
@@ -105,15 +98,19 @@ const RootStore = types
         setIsMobile: (isMobile: boolean) => {
             self.isMobile = isMobile;
         },
-        setLoading: (isLoading: boolean) => {
-            self.loading = isLoading;
+        setLoading: (isLoading?: boolean) => {
+            if (isLoading === undefined) {
+                self.loading = !self.loading;
+            } else {
+                self.loading = isLoading;
+            }
         },
         setHeroTypes: (heroTypes: IHeroType[]) => {
             self.heroTypes.replace(heroTypes);
         },
         addHeroes: (heroes: IHero[]) => {
             heroes
-                .filter(hero => !self.heroes.some(_hero=>_hero.id === hero.id))
+                .filter(hero => !self.heroes.some(_hero => _hero.id === hero.id))
                 .forEach(hero => {
                     if (hero.avatarUrl.startsWith('/static')) {
                         hero.avatarUrl = baseApiUrl + hero.avatarUrl;
@@ -159,8 +156,15 @@ const RootStore = types
             return hero;
         },
     }));
-export interface IRootStore extends Instance<typeof RootStore> {}
-export interface IRootStoreSnapshotIn extends SnapshotIn<typeof RootStore> {}
-export interface IRootStoreSnapshotOut extends SnapshotOut<typeof RootStore> {}
+
+export interface IRootStore extends Instance<typeof RootStore> {
+}
+
+export interface IRootStoreSnapshotIn extends SnapshotIn<typeof RootStore> {
+}
+
+export interface IRootStoreSnapshotOut extends SnapshotOut<typeof RootStore> {
+}
+
 export const rootOf = (self: IAnyStateTreeNode): IRootStore => getRoot(self);
 export default RootStore;

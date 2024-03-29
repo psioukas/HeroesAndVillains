@@ -1,24 +1,14 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import {
-    Box,
-    BoxProps,
-    CircularProgress,
-    FormHelperText,
-    MenuItem,
-    Select,
-    TextField,
-    Typography,
-    TypographyProps,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { useRef,useState } from 'react';
-import { useForm } from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {Box, BoxProps, FormHelperText, MenuItem, Select, TextField, Typography, TypographyProps,} from '@mui/material';
+import {styled} from '@mui/material/styles';
+import {useRef} from 'react';
+import {useForm} from 'react-hook-form';
 import * as z from 'zod';
 import Store from '../../store';
-import { CreateHeroType, IHero, IHeroType } from '../../types';
-import HeroApiRequests from '../../utils/HeroApiRequests';
-import Button from '../Button';
-import HeroAvatar from '../hero/HeroAvatar';
+import {CreateHeroType, HeroSchema, IHeroType} from '../../types';
+import {v4} from 'uuid';
+import HeroAvatar from "../hero/HeroAvatar";
+import Button from "../Button";
 
 const StyledAddHeroView = styled(Box)<BoxProps>(({ theme }) => ({
     display: 'flex',
@@ -49,7 +39,7 @@ const StyledFieldContainer = styled(Box)<BoxProps>(({ theme }) => ({
 }));
 const CreateHeroSchema = z.object({
     fullName: z.string({ required_error: 'Required' }).min(1, { message: 'Required' }),
-    avatarUrl: z.string({ required_error: 'Required' }).min(1, { message: 'Required' }),
+    avatarUrl: z.string(),
     typeId: z.string({ required_error: 'Required' }).min(1, { message: 'Required' }),
     description: z.string(),
 });
@@ -68,11 +58,23 @@ const AddHeroView = () => {
     });
     const typeRef = useRef<HTMLSelectElement>(null);
     const handleAddHero = async (heroToCreate: CreateHeroType) => {
-        const createdHero: IHero | undefined = await HeroApiRequests.createHero(heroToCreate);
-        if (createdHero) {
+        Store.setLoading(true);
+        // const createdHero: IHero | undefined = await HeroApiRequests.createHero(heroToCreate);
+        const heroType = Store.heroTypes.find((type) => type.id === heroToCreate.typeId)
+        if (!heroType) {
+            console.error('Hero type not found!');
+        }
+        const createdHero = HeroSchema.parse({
+            id: v4(),
+            type: heroType,
+            ...heroToCreate
+        })
             Store.addHero(createdHero);
             Store.setSelectedHero(createdHero.id);
-        }
+        setTimeout(() => {
+            Store.setLoading(false);
+            Store.modals.addHero.setVisibility(false);
+        }, 1500)
     };
 
     return (
@@ -110,7 +112,7 @@ const AddHeroView = () => {
                             {errors.avatarUrl?.message}
                         </Typography>
                     }
-                    {...register('avatarUrl', { required: true })}
+                    {...register('avatarUrl')}
                 />
             </StyledFieldContainer>
             <StyledFieldContainer>
@@ -170,7 +172,7 @@ const AddHeroView = () => {
                 Save Hero
             </Button>
         </StyledAddHeroView>
-    );
+    )
 };
 
 export default AddHeroView;

@@ -7,7 +7,6 @@ export const initialStoreValues = {
         heroDetails: { visible: false, title: '' },
     },
     heroes: [],
-    heroTypes: [],
     loading: true,
     notification: {
         isVisible: false,

@@ -1,8 +1,8 @@
-import { Box, BoxProps, Typography  } from '@mui/material';
-import { styled, Theme, useTheme } from '@mui/material/styles';
-import { observer } from 'mobx-react-lite';
+import {Box, BoxProps, Typography} from '@mui/material';
+import {styled, useTheme} from '@mui/material/styles';
+import {observer} from 'mobx-react-lite';
 import Store from '../store';
-import { IHero } from '../types';
+import {IHero} from '../types';
 import HeroListItem from './hero/HeroListItem';
 
 const StyledHeroesList = styled(Box)<IHeroesList>(({ theme }) => ({
@@ -36,6 +36,7 @@ const HeroesList = () => {
     const heroes = Store.heroes;
     return (
         <>
+            {heroes.length > 0 ? (<>
             {!Store.isMobile && (
                 <StyledHeroesListHeader>
                     <Box
@@ -57,22 +58,18 @@ const HeroesList = () => {
             )}
 
             <StyledHeroesList>
-                {heroes ? (
-                    heroes.map((hero: IHero) => <HeroListItem key={hero.id} hero={hero} />)
-                ) : (
-                    <span>No heroes found!</span>
-                )}
-                {heroes.length > 0 && (
-                    <Typography
-                        variant="h6"
-                        style={{
-                            margin: '0 auto',
-                        }}
-                    >
-                        No more Heroes.
-                    </Typography>
-                )}
+                {heroes.map((hero: IHero) => <HeroListItem key={hero.id} hero={hero}/>)}
             </StyledHeroesList>
+                    </>
+
+                ) :
+                <Box     width={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'} >
+                    <Typography>
+                        No heroes found!
+                    </Typography>
+                </Box>
+            }
+
         </>
     );
 };

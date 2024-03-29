@@ -90,7 +90,7 @@ export async function updateHero(hero: IHero): Promise<IHero | undefined> {
                 id,
                 avatarUrl,
                 description,
-                typeId: hero.type.id,
+                typeId: hero.type,
             }),
             headers: { 'Content-Type': 'application/json' },
         });

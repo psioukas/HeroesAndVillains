@@ -1,15 +1,21 @@
+import {z} from "zod";
+
 export interface IHeroType {
     id: string;
     name: string;
 }
+export const HeroSchema = z.object({
+    id: z.string(),
+    fullName: z.string(),
+    avatarUrl: z.string(),
+    description: z.string(),
+    type: z.object({
+        id: z.string(),
+        name: z.string(),
+    }),
+})
 
-export interface IHero {
-    id: string;
-    fullName: string;
-    avatarUrl: string;
-    description: string;
-    type: IHeroType;
-}
+export type IHero = z.infer<typeof HeroSchema>;
 
 export type CreateHeroType = Omit<IHero, 'type' | 'id'> & {
     typeId: string;

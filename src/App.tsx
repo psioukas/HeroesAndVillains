@@ -1,26 +1,17 @@
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import {
-    Alert,
-    AlertColor,
-    Box,
-    BoxProps,
-    IconButton,
-    Snackbar,
-    useMediaQuery,
-} from '@mui/material';
-import { styled, Theme } from '@mui/material/styles';
-import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
+import {Alert, AlertColor, Box, BoxProps, IconButton, Snackbar, useMediaQuery,} from '@mui/material';
+import {styled, Theme} from '@mui/material/styles';
+import {observer} from 'mobx-react-lite';
+import {useEffect, useState} from 'react';
 import Button from './components/Button';
 import ErrorPage from './components/ErrorPage';
-import HeroesList from './components/HeroesList';
 import Loader from './components/Loader';
 import Modals from './components/modal/Modals';
 import Store from './store';
-import HeroApiRequests from './utils/HeroApiRequests';
+import HeroesList from "./components/HeroesList";
 
-const StyledApp = styled(Box)<BoxProps>(({ theme, ...props }) => ({
+const StyledApp = styled(Box)<BoxProps>(({theme, ...props}) => ({
     background: theme.palette.background.default,
     width: '100%',
     height: '100%',
@@ -40,52 +31,15 @@ const App = () => {
     const [showErrorPage, setShowErrorPage] = useState<boolean>(false);
     const isMobileView = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
-    const handleFetchData = async (specificHero?: string) => {
-        try {
-            if (specificHero) {
-                const hero = await HeroApiRequests.getSpecificHero(specificHero);
-                if (hero) {
-                    Store.addHeroes([hero]);
-                    Store.showHeroDetails(hero.id);
-                    Store.setLoading(false);
-                }
-            }
-            HeroApiRequests.getHeroesList().then(heroesList => {
-                if (Store.loading) {
-                    Store.setLoading(false);
-                }
-                Store.addHeroes(heroesList);
-            });
-            HeroApiRequests.getTypes().then(typesList => {
-                Store.setHeroTypes(typesList);
-                if (Store.loading) {
-                    Store.setLoading(false);
-                }
-            });
-        } catch (error) {
-            setShowErrorPage(true);
-        }
-    };
-
     useEffect(() => {
-        let heroId = undefined;
-        if (window.location.pathname.includes('/details/')) {
-            const tempHeroId = window.location.pathname.replace('/details/', '');
-            if (tempHeroId.trim()) {
-                heroId = tempHeroId;
-            }
-        }
-        handleFetchData(heroId);
+        // create 2s delay
+        setTimeout(() => {
+            Store.setLoading();
+        }, 2000);
     }, []);
 
-    useEffect(() => {
-        Store.setIsMobile(isMobileView);
-    }, [isMobileView]);
-
-    return (
-        <StyledApp>
-            {!showErrorPage ? (
-                <>
+    return (<StyledApp>
+        {!showErrorPage ? (<>
                     <Snackbar
                         open={Store.notification.isVisible}
                         onClose={Store.notification.close}
@@ -96,17 +50,14 @@ const App = () => {
                             <IconButton
                                 onClick={Store.notification.close}
                                 size={'small'}
-                                sx={{ ml: 1 }}
+                                sx={{ml: 1}}
                             >
-                                <CloseIcon fontSize={'small'} />
+                                <CloseIcon fontSize={'small'}/>
                             </IconButton>
                         </Alert>
                     </Snackbar>
 
-                    {Store.loading ? (
-                        <Loader msg={'Please wait fetching data'} color={'#65cd95'} />
-                    ) : (
-                        <>
+            {Store.loading ? (<Loader msg={'Please wait fetching data'} color={'#65cd95'}/>) : (<>
                             <Button
                                 variant="contained"
                                 bgColor={'#65cd95'}
@@ -116,21 +67,16 @@ const App = () => {
                                 onClick={() => {
                                     Store.modals.addHero.setVisibility(true);
                                 }}
-                                sx={{ mb: isMobileView ? 4 : 9 }}
-                                startIcon={<AddIcon />}
+                                sx={{mb: isMobileView ? 4 : 9}}
+                                startIcon={<AddIcon/>}
                             >
                                 Add Hero
                             </Button>
-                            <HeroesList />
-                            <Modals />
-                        </>
-                    )}
-                </>
-            ) : (
-                <ErrorPage />
-            )}
-        </StyledApp>
-    );
+                <HeroesList/>
+                <Modals/>
+            </>)}
+        </>) : (<ErrorPage/>)}
+    </StyledApp>);
 };
 
 export default observer(App);
