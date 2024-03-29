@@ -2,11 +2,6 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
----
-
-Make sure to start docker enviroment for hero-api (https://github.com/netguru/heroes-api)
-
----
 
 ### `npm install`
 
