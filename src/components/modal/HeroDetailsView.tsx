@@ -38,10 +38,13 @@ const HeroDetailsView = () => {
 
     const handleDeleteHero = async () => {
         if (!hero) return;
-        const successfull: boolean = await HeroApiRequests.deleteHero(hero.id);
-        if (successfull) {
-            Store.deleteHero(hero);
-        }
+        // const successfull: boolean = await HeroApiRequests.deleteHero(hero.id);
+        // if (successfull) {
+        Store.notification.show('Please wait deleting hero', 'info');
+        setTimeout(() => {
+        Store.deleteHero(hero);
+        Store.notification.show('Hero deleted successfully', 'success');
+        }, 1000);
     };
 
     return hero ? (
