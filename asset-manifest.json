@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/ps-heroes-frontend/static/css/main.da832a12.css",
-    "main.js": "/ps-heroes-frontend/static/js/main.0fe19a5b.js",
+    "main.js": "/ps-heroes-frontend/static/js/main.c27be230.js",
     "index.html": "/ps-heroes-frontend/index.html",
     "main.da832a12.css.map": "/ps-heroes-frontend/static/css/main.da832a12.css.map",
-    "main.0fe19a5b.js.map": "/ps-heroes-frontend/static/js/main.0fe19a5b.js.map"
+    "main.c27be230.js.map": "/ps-heroes-frontend/static/js/main.c27be230.js.map"
   },
   "entrypoints": [
     "static/css/main.da832a12.css",
-    "static/js/main.0fe19a5b.js"
+    "static/js/main.c27be230.js"
   ]
 }
