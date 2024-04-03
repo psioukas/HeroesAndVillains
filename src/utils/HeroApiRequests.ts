@@ -1,5 +1,5 @@
 import Store from '../store';
-import { CreateHeroType, IHero, IHeroesListResponse, IHeroType } from '../types/index';
+import { CreateHeroType, IHero, IHeroesListResponse, IHeroType } from '../types';
 export const baseApiUrl: string | undefined = process.env.REACT_APP_API_BASE_URL;
 
 const showInfoNotification = (msg: string) => {
