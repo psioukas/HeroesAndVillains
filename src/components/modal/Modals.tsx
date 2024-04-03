@@ -1,24 +1,16 @@
 import CloseIcon from '@mui/icons-material/Close';
-import {
-    Box,
-    BoxProps,
-    IconButton,
-    Modal,
-    Paper,
-    PaperProps,
-    SvgIconProps,
-    Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { observer } from 'mobx-react-lite';
+import {Box, BoxProps, IconButton, Modal, Paper, PaperProps, SvgIconProps, Typography,} from '@mui/material';
+import {styled} from '@mui/material/styles';
+import {observer} from 'mobx-react-lite';
 import Store from '../../store';
 import AddHeroView from './AddHeroView';
 import HeroDetailsView from './HeroDetailsView';
-const StyledModalBody = styled(Paper)<PaperProps>(({ theme }) => ({
+
+const StyledModalBody = styled(Paper)<PaperProps>(({theme}) => ({
     position: 'absolute',
     paddingBlock: theme.spacing(6),
     background: theme.palette.background.default,
-    outline:'none',
+    outline: 'none',
     [theme.breakpoints.up('sm')]: {
         width: theme.spacing(90),
         left: '50%',
@@ -35,18 +27,18 @@ const StyledModalBody = styled(Paper)<PaperProps>(({ theme }) => ({
     },
 }));
 
-const StyledModalHeader = styled(Box)<BoxProps>(({ theme }) => ({
+const StyledModalHeader = styled(Box)<BoxProps>(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
     height: theme.spacing(6.25),
 }));
 
-const StyledModalContent = styled(Box)<BoxProps>(({ theme }) => ({
+const StyledModalContent = styled(Box)<BoxProps>(({theme}) => ({
     width: '100%',
     height: `calc(100% - ${theme.spacing(6.25)})`,
 }));
 
-const StyledIconButton = styled(IconButton)<SvgIconProps>(({ theme }) => ({
+const StyledIconButton = styled(IconButton)<SvgIconProps>(() => ({
     color: '#7f7f7f',
     marginLeft: 'auto',
     '&:hover ': {
@@ -77,12 +69,12 @@ const Modals = () => {
                         disableTouchRipple
                         onClick={Store.modals.closeOpenModal}
                     >
-                        <CloseIcon fontSize={'medium'} />
+                        <CloseIcon fontSize={'medium'}/>
                     </StyledIconButton>
                 </StyledModalHeader>
                 <StyledModalContent>
-                    {Store.modals.addHero.visible && <AddHeroView />}
-                    {Store.modals.heroDetails.visible && <HeroDetailsView />}
+                    {Store.modals.addHero.visible && <AddHeroView/>}
+                    {Store.modals.heroDetails.visible && <HeroDetailsView/>}
                 </StyledModalContent>
             </StyledModalBody>
         </Modal>

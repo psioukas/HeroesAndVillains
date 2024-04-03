@@ -1,4 +1,17 @@
 import RootStore from './HeroesStore';
+
+const valuesFromSessionStorage = {
+    heroes: () => {
+        try {
+            const sessionStorageHeroes = sessionStorage.getItem('heroes');
+            if (sessionStorageHeroes !== null)
+                return JSON.parse(sessionStorageHeroes);
+        } catch (e) {
+            console.error('Error getting heroes from local storage', e);
+        }
+        return undefined;
+    }
+} as const;
 export const initialStoreValues = {
     isMobile: false,
     selectedHeroId: '',
@@ -6,7 +19,7 @@ export const initialStoreValues = {
         addHero: { visible: false, title: 'Add Hero' },
         heroDetails: { visible: false, title: '' },
     },
-    heroes: [],
+    heroes: valuesFromSessionStorage.heroes(),
     loading: true,
     notification: {
         isVisible: false,
