@@ -1,6 +1,6 @@
 import {applySnapshot, getRoot, IAnyStateTreeNode, Instance, SnapshotIn, SnapshotOut, types,} from 'mobx-state-tree';
 import {baseApiUrl} from '../utils/HeroApiRequests';
-import {IHero, IHeroType} from '../types';
+import {IHero, IHeroType} from './../types/index';
 import {v4} from "uuid";
 
 const Modal = types
@@ -120,20 +120,17 @@ const RootStore = types
         },
         addHero: (hero: IHero) => {
             self.heroes.push(hero);
-            sessionStorage.setItem('heroes', JSON.stringify(self.heroes));
             self.modals.closeOpenModal();
         },
         deleteHero: (hero?: IHero) => {
             if (!hero) return;
             self.heroes.remove(hero);
-            sessionStorage.setItem('heroes', JSON.stringify(self.heroes));
             self.modals.closeOpenModal();
         },
         updateHero: (updatedHero: IHero) => {
             const hero = self.heroes.find(_hero => _hero.id === updatedHero.id);
             if (!hero) return;
             applySnapshot(hero, updatedHero);
-            sessionStorage.setItem('heroes', JSON.stringify(self.heroes));
             self.modals.closeOpenModal();
         },
         setSelectedHero: (heroId: string) => {

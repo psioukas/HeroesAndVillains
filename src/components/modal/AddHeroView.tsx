@@ -28,10 +28,9 @@ const StyledAddHeroView = styled(Box)<BoxProps>(({ theme }) => ({
     },
 }));
 
-const StyledLabel = styled(Typography)<TypographyProps>(() => ({
+const StyledLabel = styled(Typography)<TypographyProps>(({ theme }) => ({
     color: '#93969e',
 }));
-
 const StyledFieldContainer = styled(Box)<BoxProps>(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
@@ -59,7 +58,7 @@ const AddHeroView = () => {
     });
     const typeRef = useRef<HTMLSelectElement>(null);
     const handleAddHero = async (heroToCreate: CreateHeroType) => {
-        Store.notification.show('Adding hero ...');
+        Store.setLoading(true);
         // const createdHero: IHero | undefined = await HeroApiRequests.createHero(heroToCreate);
         const heroType = Store.heroTypes.find((type) => type.id === heroToCreate.typeId)
         if (!heroType) {
@@ -73,7 +72,7 @@ const AddHeroView = () => {
             Store.addHero(createdHero);
             Store.setSelectedHero(createdHero.id);
         setTimeout(() => {
-            Store.notification.show('Hero Added successfully', 'success')
+            Store.setLoading(false);
             Store.modals.addHero.setVisibility(false);
         }, 1500)
     };

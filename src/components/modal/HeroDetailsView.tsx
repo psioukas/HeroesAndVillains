@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import Store from '../../store';
+import HeroApiRequests from '../../utils/HeroApiRequests';
 import Button from '../Button';
 import HeroAvatar from '../hero/HeroAvatar';
 
