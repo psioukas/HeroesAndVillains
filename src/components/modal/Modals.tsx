@@ -5,6 +5,7 @@ import {observer} from 'mobx-react-lite';
 import Store from '../../store';
 import AddHeroView from './AddHeroView';
 import HeroDetailsView from './HeroDetailsView';
+import AddHeroTypeView from "./AddHeroTypeView.tsx";
 
 const StyledModalBody = styled(Paper)<PaperProps>(({theme}) => ({
     position: 'absolute',
@@ -74,6 +75,7 @@ const Modals = () => {
                 </StyledModalHeader>
                 <StyledModalContent>
                     {Store.modals.addHero.visible && <AddHeroView/>}
+                    {Store.modals.addHeroType.visible && <AddHeroTypeView/>}
                     {Store.modals.heroDetails.visible && <HeroDetailsView/>}
                 </StyledModalContent>
             </StyledModalBody>

@@ -32,6 +32,7 @@ const Notification = types
 const Modals = types
     .model('Modals', {
         addHero: types.optional(Modal, {visible: false, title: ''}),
+        addHeroType: types.optional(Modal, {visible: false, title: ''}),
         heroDetails: types.optional(Modal, {visible: false, title: ''}),
     })
     .views(self => ({
@@ -90,7 +91,7 @@ const RootStore = types
         loading: types.optional(types.boolean, true),
         modals: Modals,
         heroes: types.optional(types.array(Hero), []),
-        heroTypes: types.optional(types.array(HeroType), [{id: v4(),name:'Hero'},{id:v4(),name:'Villain'}]),
+        heroTypes: types.optional(types.array(HeroType), [{id: v4(), name: 'Hero'}, {id: v4(), name: 'Villain'}]),
         selectedHeroId: types.optional(types.string, ''),
         notification: Notification,
     })
@@ -122,6 +123,15 @@ const RootStore = types
             self.heroes.push(hero);
             sessionStorage.setItem('heroes', JSON.stringify(self.heroes));
             self.modals.closeOpenModal();
+        },
+        createHeroType: (heroType: IHeroType) => {
+            self.heroTypes.push(heroType);
+            sessionStorage.setItem('heroTypes', JSON.stringify(self.heroTypes));
+        },
+        deleteHeroType: (heroType?: IHeroType) => {
+            if (!heroType) return;
+            self.heroTypes.remove(heroType);
+            sessionStorage.setItem('heroTypes', JSON.stringify(self.heroTypes));
         },
         deleteHero: (hero?: IHero) => {
             if (!hero) return;

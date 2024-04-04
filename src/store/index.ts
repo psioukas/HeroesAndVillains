@@ -1,6 +1,17 @@
 import RootStore from './HeroesStore';
+import {v4} from "uuid";
 
 const valuesFromSessionStorage = {
+    heroTypes: () => {
+        try {
+            const sessionStorageHeroTypes = sessionStorage.getItem('heroTypes');
+            if (sessionStorageHeroTypes !== null)
+                return JSON.parse(sessionStorageHeroTypes);
+        } catch (e) {
+            console.error('Error getting hero types from local storage', e);
+        }
+        return undefined;
+    },
     heroes: () => {
         try {
             const sessionStorageHeroes = sessionStorage.getItem('heroes');
@@ -16,10 +27,11 @@ export const initialStoreValues = {
     isMobile: false,
     selectedHeroId: '',
     modals: {
-        addHero: { visible: false, title: 'Add Hero' },
-        heroDetails: { visible: false, title: '' },
+        addHero: {visible: false, title: 'Add Hero'},
+        heroDetails: {visible: false, title: ''},
     },
     heroes: valuesFromSessionStorage.heroes(),
+    heroTypes: valuesFromSessionStorage.heroTypes() ?? [{id: v4(), name: 'Hero'}, {id: v4(), name: 'Villain'}],
     loading: true,
     notification: {
         isVisible: false,

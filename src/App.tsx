@@ -10,6 +10,7 @@ import Loader from './components/Loader';
 import Modals from './components/modal/Modals';
 import Store from './store';
 import HeroesList from "./components/HeroesList";
+import './App.css'
 
 const StyledApp = styled(Box)<BoxProps>(({theme}) => ({
     background: theme.palette.background.default,
@@ -17,8 +18,7 @@ const StyledApp = styled(Box)<BoxProps>(({theme}) => ({
     height: '100%',
     overflow: 'hidden',
     [theme.breakpoints.up('sm')]: {
-        paddingTop: theme.spacing(5),
-        paddingBottom: theme.spacing(5),
+        marginBlock: theme.spacing(5),
         paddingLeft: theme.spacing(16),
         paddingRight: theme.spacing(12),
     },
@@ -74,6 +74,20 @@ const App = () => {
                     startIcon={<AddIcon/>}
                 >
                     Add Hero
+                </Button>
+                <Button
+                    variant="outlined"
+                    bgColor={'#65cd95'}
+                    textColor={'#fffffff'}
+                    activeBgColor={'#3e815d'}
+                    fullWidth
+                    onClick={() => {
+                        Store.modals.addHeroType.setVisibility(true);
+                    }}
+                    sx={{mb: isMobileView ? 4 : 9}}
+                    startIcon={<AddIcon/>}
+                >
+                    Add hero type
                 </Button>
                 <HeroesList/>
                 <Modals/>
