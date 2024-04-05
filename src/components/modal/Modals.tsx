@@ -6,6 +6,7 @@ import Store from '../../store';
 import AddHeroView from './AddHeroView';
 import HeroDetailsView from './HeroDetailsView';
 import AddHeroTypeView from "./AddHeroTypeView.tsx";
+import UpdateHeroView from "./UpdateHeroView.tsx";
 
 const StyledModalBody = styled(Paper)<PaperProps>(({theme}) => ({
     position: 'absolute',
@@ -76,6 +77,7 @@ const Modals = () => {
                 <StyledModalContent>
                     {Store.modals.addHero.visible && <AddHeroView/>}
                     {Store.modals.addHeroType.visible && <AddHeroTypeView/>}
+                    {Store.modals.updateHero.visible && <UpdateHeroView/>}
                     {Store.modals.heroDetails.visible && <HeroDetailsView/>}
                 </StyledModalContent>
             </StyledModalBody>

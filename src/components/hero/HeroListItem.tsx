@@ -1,11 +1,13 @@
-import { Paper, PaperProps, Typography } from '@mui/material';
-import { styled, useTheme } from '@mui/material/styles';
-import { observer } from 'mobx-react-lite';
-import React, { useEffect, useRef, useState } from 'react';
+import {IconButton, Menu, MenuItem, Paper, PaperProps, Typography} from '@mui/material';
+import {styled, useTheme} from '@mui/material/styles';
+import {observer} from 'mobx-react-lite';
+import React, {useEffect, useRef, useState} from 'react';
 import Store from '../../store';
-import { IHero } from '../../types';
+import {IHero} from '../../types';
 import HeroAvatar from './HeroAvatar';
-const StyledHeroListItem = styled(Paper)<PaperProps>(({ theme }) => ({
+import {Workspaces} from '@mui/icons-material';
+
+const StyledHeroListItem = styled(Paper)<PaperProps>(({theme}) => ({
     background: theme.palette.common.white,
     paddingLeft: theme.spacing(4),
     paddingRight: theme.spacing(9),
@@ -37,10 +39,10 @@ const StyledHeroListItem = styled(Paper)<PaperProps>(({ theme }) => ({
     },
 }));
 
-const HeroListItem: React.FC<{ hero: IHero }> = ({ hero }) => {
+const HeroListItem: React.FC<{ hero: IHero }> = ({hero}) => {
     const theme = useTheme();
     const listItemRef = useRef<HTMLDivElement>(null);
-
+    const [openItemContextMenu, setOpenItemContextMenu] = useState<boolean>(false);
     const [mouseOver, setMouseOver] = useState<boolean>(false);
     const handleHoverStart = () => {
         setMouseOver(true);
@@ -62,58 +64,88 @@ const HeroListItem: React.FC<{ hero: IHero }> = ({ hero }) => {
         }
     }, [hero]);
     return (
-        <StyledHeroListItem
-            id={`hero-list-item-${hero.id}`}
-            ref={listItemRef}
-            elevation={mouseOver ? 3 : 0}
-            onMouseEnter={handleHoverStart}
-            onMouseLeave={handleHoverFinish}
-            onTouchStart={handleHoverStart}
-            onTouchEnd={handleHoverFinish}
-            onClick={() => {
-                Store.showHeroDetails(hero.id);
-            }}
-        >
-            <HeroAvatar
-                src={hero.avatarUrl}
-                alt={`${hero.fullName} avatar`}
-                height={theme.spacing(11.25)}
-                width={theme.spacing(11.25)}
-                mr={5}
-                gridArea={'hero-avatar'}
-            />
-            <Typography
-                variant={'body1'}
-                fontWeight={'bolder'}
-                flex={4}
-                whiteSpace={'nowrap'}
-                overflow={'hidden'}
-                textOverflow={'ellipsis'}
-                gridArea={'hero-name'}
+        <>
+            <StyledHeroListItem
+                id={`hero-list-item-${hero.id}`}
+                ref={listItemRef}
+                elevation={mouseOver ? 3 : 0}
+                onMouseEnter={handleHoverStart}
+                onMouseLeave={handleHoverFinish}
+                onTouchStart={handleHoverStart}
+                onTouchEnd={handleHoverFinish}
+                onClick={(e) => {
+
+                    if (e.currentTarget === listItemRef.current)
+                        Store.showHeroDetails(hero.id);
+                }}
             >
-                {hero.fullName}
-            </Typography>
-            <Typography
-                variant={'body1'}
-                flex={3}
-                whiteSpace={'nowrap'}
-                overflow={'hidden'}
-                textOverflow={'ellipsis'}
-                gridArea={'hero-type'}
-            >
-                {hero.type.name}
-            </Typography>
-            <Typography
-                variant={'body1'}
-                flex={4}
-                whiteSpace={'nowrap'}
-                overflow={'hidden'}
-                textOverflow={'ellipsis'}
-                gridArea={'hero-description'}
-            >
-                {hero.description}
-            </Typography>
-        </StyledHeroListItem>
+                <HeroAvatar
+                    src={hero.avatarUrl}
+                    alt={`${hero.fullName} avatar`}
+                    height={theme.spacing(11.25)}
+                    width={theme.spacing(11.25)}
+                    mr={5}
+                    gridArea={'hero-avatar'}
+                />
+                <Typography
+                    variant={'body1'}
+                    fontWeight={'bolder'}
+                    flex={4}
+                    whiteSpace={'nowrap'}
+                    overflow={'hidden'}
+                    textOverflow={'ellipsis'}
+                    gridArea={'hero-name'}
+                >
+                    {hero.fullName}
+                </Typography>
+                <Typography
+                    variant={'body1'}
+                    flex={3}
+                    whiteSpace={'nowrap'}
+                    overflow={'hidden'}
+                    textOverflow={'ellipsis'}
+                    gridArea={'hero-type'}
+                >
+                    {hero.type.name}
+                </Typography>
+                <Typography
+                    variant={'body1'}
+                    flex={4}
+                    whiteSpace={'nowrap'}
+                    overflow={'hidden'}
+                    textOverflow={'ellipsis'}
+                    gridArea={'hero-description'}
+                >
+                    {hero.description}
+                </Typography>
+
+                <IconButton sx={{
+                    transition: 'transform 400ms ease-in-out',
+                    '&:hover': {
+                        transform: 'rotate(120deg)',
+                    }
+                }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                setOpenItemContextMenu(true)
+                            }}
+                >
+                    <Workspaces/>
+                </IconButton>
+
+            </StyledHeroListItem>
+            <Menu open={openItemContextMenu}
+                  anchorEl={listItemRef.current}
+                  onClose={() => {
+                      setOpenItemContextMenu(false)
+                  }}
+                  anchorOrigin={{horizontal: 'right', vertical: "center"}}>
+                <MenuItem onClick={() => Store.deleteHero(hero)}>Delete</MenuItem>
+                <MenuItem onClick={() => Store.modals.updateCharacter(hero)}>Update
+                </MenuItem>
+            </Menu>
+        </>
     );
 };
 

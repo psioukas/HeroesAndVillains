@@ -29,11 +29,27 @@ const Notification = types
             self.isVisible = false;
         },
     }));
+const HeroType = types.model('HeroType', {
+    id: types.identifier,
+    name: types.string,
+});
+
+const Hero = types.model('Hero', {
+    id: types.identifier,
+    avatarUrl: types.string,
+    description: types.string,
+    fullName: types.string,
+    type: HeroType,
+});
+
 const Modals = types
     .model('Modals', {
-        addHero: types.optional(Modal, {visible: false, title: ''}),
-        addHeroType: types.optional(Modal, {visible: false, title: ''}),
-        heroDetails: types.optional(Modal, {visible: false, title: ''}),
+        addHero: types.optional(Modal, {visible: false, title: 'Add character'}),
+        updateHero: types.optional(types.compose(Modal, types.model({
+            heroToUpdate: types.maybe(types.reference(Hero)),
+        })), {visible: false, title: 'Update character', heroToUpdate: undefined}),
+        addHeroType: types.optional(Modal, {visible: false, title: 'Add character type'}),
+        heroDetails: types.optional(Modal, {visible: false, title: 'Character details'}),
     })
     .views(self => ({
         get activeModalTitle() {
@@ -52,6 +68,10 @@ const Modals = types
         },
     }))
     .actions(self => ({
+        updateCharacter: (hero: IHero) => {
+            self.updateHero.visible = true;
+            self.updateHero.heroToUpdate = hero;
+        },
         closeOpenModal: () => {
             if (self.isAnyModalOpen) {
                 type ModalsType = typeof self;
@@ -70,20 +90,9 @@ const Modals = types
                     });
             }
         },
+
     }));
 
-const HeroType = types.model('HeroType', {
-    id: types.string,
-    name: types.string,
-});
-
-const Hero = types.model('Hero', {
-    id: types.string,
-    avatarUrl: types.string,
-    description: types.string,
-    fullName: types.string,
-    type: HeroType,
-});
 
 const RootStore = types
     .model('Store', {
@@ -169,6 +178,7 @@ const RootStore = types
             return hero;
         },
     }));
+
 
 export interface IRootStore extends Instance<typeof RootStore> {
 }
