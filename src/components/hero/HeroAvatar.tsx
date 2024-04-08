@@ -1,6 +1,6 @@
-import { Box, BoxProps } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import {useState} from "react";
+import {Box, BoxProps} from '@mui/material';
+import {styled} from '@mui/material/styles';
+import {useEffect, useState} from "react";
 
 const StyledImageContainer = styled(Box)<BoxProps>(() => ({
     '& > img': {
@@ -11,14 +11,20 @@ const StyledImageContainer = styled(Box)<BoxProps>(() => ({
 }));
 
 interface IHeroAvatar extends BoxProps {
-    src?: string;
+    src: string;
     alt?: string;
     height?: string | number;
     width?: string | number;
 }
-const HeroAvatar = ({ src, alt, ...props }: IHeroAvatar) => {
-    const [imgUrl,setImgUrl] = useState(src);
 
+const HeroAvatar = ({src, alt, ...props}: IHeroAvatar) => {
+    const [imgUrl, setImgUrl] = useState(src);
+    useEffect(() => {
+        const imgEl = document.createElement('img');
+        imgEl.onload = () => setImgUrl(src)
+        imgEl.onerror = () => setImgUrl('https://via.placeholder.com/150');
+        imgEl.src = src;
+    }, [src])
     return (
         <StyledImageContainer display={props.display ?? 'inline'} {...props}>
             <img
@@ -26,7 +32,6 @@ const HeroAvatar = ({ src, alt, ...props }: IHeroAvatar) => {
                 alt={alt ?? 'hero avatar'}
                 height={props.height ?? '100%'}
                 width={props.width ?? '100%'}
-                onError={() => setImgUrl('https://via.placeholder.com/150')}
             />
         </StyledImageContainer>
     );

@@ -63,6 +63,22 @@ const HeroListItem: React.FC<{ hero: IHero }> = ({hero}) => {
             }
         }
     }, [hero]);
+
+    function handleListItemAction(action: string) {
+        switch (action) {
+            case 'delete':
+                const confirmationSuccess = window.confirm('Are you sure you want to delete this character?')
+                if (confirmationSuccess) {
+                    Store.deleteHero(hero);
+                }
+                break
+            case 'update':
+                Store.modals.updateCharacter(hero)
+                break
+        }
+        setOpenItemContextMenu(false)
+    }
+
     return (
         <>
             <StyledHeroListItem
@@ -141,8 +157,8 @@ const HeroListItem: React.FC<{ hero: IHero }> = ({hero}) => {
                       setOpenItemContextMenu(false)
                   }}
                   anchorOrigin={{horizontal: 'right', vertical: "center"}}>
-                <MenuItem onClick={() => Store.deleteHero(hero)}>Delete</MenuItem>
-                <MenuItem onClick={() => Store.modals.updateCharacter(hero)}>Update
+                <MenuItem onClick={() => handleListItemAction('delete')}>Delete</MenuItem>
+                <MenuItem onClick={() => handleListItemAction('update')}>Update
                 </MenuItem>
             </Menu>
         </>

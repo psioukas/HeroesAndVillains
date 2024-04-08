@@ -113,8 +113,7 @@ const UpdateHeroView = () => {
                 <StyledLabel variant={'body2'}>Type</StyledLabel>
                 <Select
                     inputRef={typeRef}
-                    
-                    value={Store.modals.updateHero.heroToUpdate?.type.name ?? ''}
+                    defaultValue={Store.modals.updateHero.heroToUpdate?.type.id ?? ''}
                     {...register('type.id', {required: true})}
                 >
                     {Store.heroTypes.map((type: IHeroType) => (

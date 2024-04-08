@@ -50,6 +50,7 @@ const Modals = types
         })), {visible: false, title: 'Update character', heroToUpdate: undefined}),
         addHeroType: types.optional(Modal, {visible: false, title: 'Add character type'}),
         heroDetails: types.optional(Modal, {visible: false, title: 'Character details'}),
+        confirmationModal: types.optional(Modal, {visible: false, title: ''}),
     })
     .views(self => ({
         get activeModalTitle() {
