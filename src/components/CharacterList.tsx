@@ -35,10 +35,10 @@ interface ICharacterList extends BoxProps {
 const CharacterList = () => {
     const theme = useTheme();
 
-    const character = Store.character;
+    const characters = Store.characters;
     return (
         <>
-            {character.length > 0 ? (<>
+            {characters.length > 0 ? (<>
                         {!Store.isMobile && (
                             <StyledCharacterListHeader>
                                 <Box
@@ -60,8 +60,8 @@ const CharacterList = () => {
                         )}
 
                         <StyledCharacterList>
-                            {character.map((character: ICharacter) => <CharacterListItem key={character.id}
-                                                                                         character={character}/>)}
+                            {characters.map((character: ICharacter) => <CharacterListItem key={character.id}
+                                                                                          character={character}/>)}
                         </StyledCharacterList>
                     </>
 

@@ -28,15 +28,20 @@ const StyledApp = styled(Box)<BoxProps>(({theme}) => ({
 }));
 
 const App = () => {
-    const [showErrorPage, _setShowErrorPage] = useState<boolean>(false);
+    const [showErrorPage, setShowErrorPage] = useState<boolean>(false);
     const isMobileView = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
     useEffect(() => {
-        // create 2s delay
         setTimeout(() => {
             Store.setLoading();
         }, 2000);
     }, []);
+
+    useEffect(() => {
+        if (Store.fatalError) {
+            setShowErrorPage(true);
+        }
+    }, [Store.fatalError]);
 
     return (<StyledApp>
         <Typography variant={'h1'} color={'#65cd95'} align={'center'}>

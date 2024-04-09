@@ -100,13 +100,17 @@ const RootStore = types
         isMobile: types.optional(types.boolean, false),
         loading: types.optional(types.boolean, true),
         modals: Modals,
-        character: types.optional(types.array(Character), []),
+        characters: types.optional(types.array(Character), []),
         characterTypes: types.optional(types.array(CharacterType), [{id: v4(), name: 'Character'}, {
             id: v4(),
             name: 'Villain'
         }]),
         selectedCharacterId: types.optional(types.string, ''),
         notification: Notification,
+        fatalError: types.maybe(types.model({
+            msg: types.optional(types.string, ''),
+            from: types.optional(types.string, ''),
+        }))
     })
     .actions(self => ({
         setIsMobile: (isMobile: boolean) => {
@@ -122,19 +126,19 @@ const RootStore = types
         setCharacterTypes: (characterTypes: ICharacterType[]) => {
             self.characterTypes.replace(characterTypes);
         },
-        addCharacter: (character: ICharacter[]) => {
-            character
-                .filter(character => !self.character.some(_character => _character.id === character.id))
+        addCharacters: (characters: ICharacter[]) => {
+            characters
+                .filter(character => !self.characters.some(_character => _character.id === character.id))
                 .forEach(character => {
                     if (character.avatarUrl.startsWith('/static')) {
                         character.avatarUrl = baseApiUrl + character.avatarUrl;
                     }
-                    self.character.push(character);
+                    self.characters.push(character);
                 });
         },
         addCharacter: (character: ICharacter) => {
-            self.character.push(character);
-            sessionStorage.setItem('character', JSON.stringify(self.character));
+            self.characters.push(character);
+            sessionStorage.setItem('character', JSON.stringify(self.characters));
             self.modals.closeOpenModal();
         },
         createCharacterType: (characterType: ICharacterType) => {
@@ -148,15 +152,15 @@ const RootStore = types
         },
         deleteCharacter: (character?: ICharacter) => {
             if (!character) return;
-            self.character.remove(character);
-            sessionStorage.setItem('character', JSON.stringify(self.character));
+            self.characters.remove(character);
+            sessionStorage.setItem('character', JSON.stringify(self.characters));
             self.modals.closeOpenModal();
         },
         updateCharacter: (updatedCharacter: ICharacter) => {
-            const character = self.character.find(_character => _character.id === updatedCharacter.id);
+            const character = self.characters.find(_character => _character.id === updatedCharacter.id);
             if (!character) return;
             applySnapshot(character, updatedCharacter);
-            sessionStorage.setItem('character', JSON.stringify(self.character));
+            sessionStorage.setItem('character', JSON.stringify(self.characters));
             self.modals.closeOpenModal();
         },
         setSelectedCharacter: (characterId: string) => {
@@ -164,7 +168,7 @@ const RootStore = types
         },
         showCharacterDetails: (characterId?: string) => {
             if (!characterId) return;
-            if (self.character.some(character => character.id === characterId)) {
+            if (self.characters.some(character => character.id === characterId)) {
                 rootOf(self).setSelectedCharacter(characterId);
                 self.modals.closeOpenModal();
                 self.modals.characterDetails.setVisibility(true);
@@ -176,7 +180,7 @@ const RootStore = types
     }))
     .views(self => ({
         get selectedCharacter(): ICharacter | undefined {
-            const character: ICharacter | undefined = self.character.find(
+            const character: ICharacter | undefined = self.characters.find(
                 character => character.id === self.selectedCharacterId,
             );
             return character;

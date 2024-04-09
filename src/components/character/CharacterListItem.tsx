@@ -67,8 +67,7 @@ const CharacterListItem: React.FC<{ character: ICharacter }> = ({character}) => 
     function handleListItemAction(action: string) {
         switch (action) {
             case 'delete':
-                const confirmationSuccess = window.confirm('Are you sure you want to delete this character?')
-                if (confirmationSuccess) {
+                if (window.confirm('Are you sure you want to delete this character?')) {
                     Store.deleteCharacter(character);
                 }
                 break

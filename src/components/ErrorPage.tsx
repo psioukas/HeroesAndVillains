@@ -1,8 +1,9 @@
-import { Box, BoxProps, Typography } from '@mui/material';
-import { styled, useTheme } from '@mui/material/styles';
+import {Box, BoxProps, Typography} from '@mui/material';
+import {styled, useTheme} from '@mui/material/styles';
 import Button from './Button';
+import Store from '../store';
 
-const StyledErrorContainer = styled(Box)<BoxProps>(({ theme }) => ({
+const StyledErrorContainer = styled(Box)<BoxProps>(({theme}) => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -19,7 +20,7 @@ const ErrorPage = () => {
                 OOPS!
             </Typography>
             <Typography variant={'h5'} fontWeight={'bold'} mb={6}>
-                We cannot find the page you are looking for.
+                {Store.fatalError?.msg ? Store.fatalError.msg : 'We cannot find the page you are looking for.'}
             </Typography>
             <Button
                 variant={'outlined'}
