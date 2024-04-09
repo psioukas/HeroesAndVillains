@@ -14,9 +14,7 @@
     "prepare": "husky || true"
   },
   "lint-staged": {
-    "**/*": [
-      "npm run format"
-    ]
+    "**/*": "prettier --write --ignore-unknown"
   },
   "husky": {
     "hooks": {
@@ -29,6 +27,7 @@
     "@hookform/resolvers": "^3.3.4",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
+    "eslint-config-prettier": "^9.1.0",
     "mobx": "^6.12.3",
     "mobx-react-lite": "^4.0.7",
     "mobx-state-tree": "^5.4.1",
