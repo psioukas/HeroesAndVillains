@@ -4,12 +4,12 @@ import {styled} from '@mui/material/styles';
 import {useForm} from 'react-hook-form';
 
 import Store from '../../store';
-import {HeroTypeSchema, IHeroType} from '../../types';
+import {CharacterTypeSchema, ICharacterType} from '../../types';
 import {v4} from 'uuid';
 
 import Button from "../Button";
 
-const StyledAddHeroTypeView = styled(Box)<BoxProps>(({theme}) => ({
+const StyledAddCharacterTypeView = styled(Box)<BoxProps>(({theme}) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(2),
@@ -39,29 +39,29 @@ const StyledFieldContainer = styled(Box)<BoxProps>(({theme}) => ({
 }));
 
 
-const AddHeroTypeView = () => {
+const AddCharacterTypeView = () => {
     const {
         register,
         handleSubmit,
         formState: {errors},
-    } = useForm<Pick<IHeroType, 'name'>>({
-        resolver: zodResolver(HeroTypeSchema.pick({name: true})),
+    } = useForm<Pick<ICharacterType, 'name'>>({
+        resolver: zodResolver(CharacterTypeSchema.pick({name: true})),
         reValidateMode: 'onBlur',
         mode: 'onBlur',
     });
 
-    const handleAddHeroType = async (heroType: Pick<IHeroType, "name">) => {
-        Store.notification.show('Adding hero ...');
-        const exists = Store.heroTypes.every(_heroType => heroType.name === _heroType.name)
+    const handleAddCharacterType = async (characterType: Pick<ICharacterType, "name">) => {
+        Store.notification.show('Adding character ...');
+        const exists = Store.characterTypes.every(_characterType => characterType.name === _characterType.name)
         if (!exists) {
-            const createdHeroType = HeroTypeSchema.parse({
+            const createdCharacterType = CharacterTypeSchema.parse({
                 id: v4(),
-                name: heroType.name
+                name: characterType.name
             });
-            Store.createHeroType(createdHeroType);
+            Store.createCharacterType(createdCharacterType);
             setTimeout(() => {
-                Store.notification.show('Hero Added successfully', 'success')
-                Store.modals.addHeroType.setVisibility(false);
+                Store.notification.show('Character Added successfully', 'success')
+                Store.modals.addCharacterType.setVisibility(false);
             }, 1500);
         } else {
             Store.notification.show('Something went wrong', 'error')
@@ -69,9 +69,9 @@ const AddHeroTypeView = () => {
     };
 
     return (
-        <StyledAddHeroTypeView
+        <StyledAddCharacterTypeView
             component={'form'}
-            onSubmit={handleSubmit(submitHeroType => handleAddHeroType(submitHeroType))}
+            onSubmit={handleSubmit(submitCharacterType => handleAddCharacterType(submitCharacterType))}
         >
             <StyledFieldContainer>
                 <StyledLabel variant={'body2'}>Type name</StyledLabel>
@@ -97,10 +97,10 @@ const AddHeroTypeView = () => {
                 fullWidth
                 disabled={Object.keys(errors).length > 0}
             >
-                Save Hero type
+                Save Character type
             </Button>
-        </StyledAddHeroTypeView>
+        </StyledAddCharacterTypeView>
     )
 };
 
-export default AddHeroTypeView;
+export default AddCharacterTypeView;

@@ -3,14 +3,12 @@ import {Box, BoxProps, FormHelperText, MenuItem, Select, TextField, Typography, 
 import {styled} from '@mui/material/styles';
 import {useRef} from 'react';
 import {useForm} from 'react-hook-form';
-import * as z from 'zod';
 import Store from '../../store';
-import {CreateHeroType, HeroSchema, IHeroType} from '../../types';
-import {v4} from 'uuid';
-import HeroAvatar from "../hero/HeroAvatar";
+import {CharacterSchema, ICharacter, ICharacterType} from '../../types';
+import CharacterAvatar from "../character/CharacterAvatar";
 import Button from "../Button";
 
-const StyledAddHeroView = styled(Box)<BoxProps>(({ theme }) => ({
+const StyledUpdateCharacterView = styled(Box)<BoxProps>(({theme}) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(2),
@@ -32,58 +30,52 @@ const StyledLabel = styled(Typography)<TypographyProps>(() => ({
     color: '#93969e',
 }));
 
-const StyledFieldContainer = styled(Box)<BoxProps>(({ theme }) => ({
+const StyledFieldContainer = styled(Box)<BoxProps>(({theme}) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(1),
     width: '100%',
 }));
-const CreateHeroSchema = z.object({
-    fullName: z.string({ required_error: 'Required' }).min(1, { message: 'Required' }),
-    avatarUrl: z.string(),
-    typeId: z.string({ required_error: 'Required' }).min(1, { message: 'Required' }),
-    description: z.string(),
-});
 
-type CreateHeroSchemaType = z.infer<typeof CreateHeroSchema>;
-
-const AddHeroView = () => {
+const UpdateCharacterView = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
-    } = useForm<CreateHeroSchemaType>({
-        resolver: zodResolver(CreateHeroSchema),
+        formState: {errors},
+    } = useForm<ICharacter>({
+        resolver: zodResolver(CharacterSchema),
         reValidateMode: 'onBlur',
         mode: 'onBlur',
+        values: Store.modals.updateCharacter.characterToUpdate
     });
+    console.log(Store.modals.updateCharacter.characterToUpdate)
     const typeRef = useRef<HTMLSelectElement>(null);
-    const handleAddHero = async (heroToCreate: CreateHeroType) => {
-        Store.notification.show('Adding hero ...');
-        // const createdHero: IHero | undefined = await HeroApiRequests.createHero(heroToCreate);
-        const heroType = Store.heroTypes.find((type) => type.id === heroToCreate.typeId)
-        if (!heroType) {
-            console.error('Hero type not found!');
+    const handleUpdateCharacter = async (characterToUpdate: ICharacter) => {
+        try {
+            console.log(`UpdateCharacterView.tsx - handleUpdateCharacter`, characterToUpdate)
+            Store.notification.show('Updating character ...');
+            const characterType = Store.characterTypes.find((type) => type.id === characterToUpdate.type.id)
+            if (!characterType) {
+                Store.notification.show('Character update failed, character type not found.', 'error')
+            }
+            const updatedCharacter = CharacterSchema.parse(characterToUpdate);
+            Store.updateCharacter(updatedCharacter);
+            Store.setSelectedCharacter(updatedCharacter.id);
+            Store.notification.show('Character updated successfully!', 'success')
+
+        } catch (e) {
+            Store.notification.show('An error occurred while updating character', 'error');
+        } finally {
+            Store.modals.updateCharacter.setVisibility(false);
         }
-        const createdHero = HeroSchema.parse({
-            id: v4(),
-            type: heroType,
-            ...heroToCreate
-        })
-            Store.addHero(createdHero);
-            Store.setSelectedHero(createdHero.id);
-        setTimeout(() => {
-            Store.notification.show('Hero Added successfully', 'success')
-            Store.modals.addHero.setVisibility(false);
-        }, 1500)
     };
 
     return (
-        <StyledAddHeroView
+        <StyledUpdateCharacterView
             component={'form'}
-            onSubmit={handleSubmit(submitHero => handleAddHero(submitHero))}
+            onSubmit={handleSubmit(submitCharacter => handleUpdateCharacter(submitCharacter))}
         >
-            <HeroAvatar
+            <CharacterAvatar
                 src={
                     'https://robohash.org/cade94edf5541f8cf5c03efda775f471?set=set1&bgset=&size=400x400'
                 }
@@ -100,7 +92,7 @@ const AddHeroView = () => {
                             {errors.fullName?.message}
                         </Typography>
                     }
-                    {...register('fullName', { required: true })}
+                    {...register('fullName', {required: true})}
                 />
             </StyledFieldContainer>
             <StyledFieldContainer>
@@ -120,10 +112,10 @@ const AddHeroView = () => {
                 <StyledLabel variant={'body2'}>Type</StyledLabel>
                 <Select
                     inputRef={typeRef}
-                    defaultValue={''}
-                    {...register('typeId', { required: true })}
+                    defaultValue={Store.modals.updateCharacter.characterToUpdate?.type.id ?? ''}
+                    {...register('type.id', {required: true})}
                 >
-                    {Store.heroTypes.map((type: IHeroType) => (
+                    {Store.characterTypes.map((type: ICharacterType) => (
                         <MenuItem
                             key={type.id}
                             value={type.id}
@@ -137,10 +129,10 @@ const AddHeroView = () => {
                         </MenuItem>
                     ))}
                 </Select>
-                {Boolean(errors.typeId?.message) && (
-                    <FormHelperText error={Boolean(errors.typeId?.message)}>
+                {Boolean(errors.type?.id?.message) && (
+                    <FormHelperText error={Boolean(errors.type?.id?.message)}>
                         <Typography variant={'body2'} component={'span'}>
-                            {errors.typeId?.message}
+                            {errors.type?.id?.message}
                         </Typography>
                     </FormHelperText>
                 )}
@@ -170,10 +162,10 @@ const AddHeroView = () => {
                 fullWidth
                 disabled={Object.keys(errors).length > 0}
             >
-                Save Hero
+                Save Character
             </Button>
-        </StyledAddHeroView>
+        </StyledUpdateCharacterView>
     )
 };
 
-export default AddHeroView;
+export default UpdateCharacterView;

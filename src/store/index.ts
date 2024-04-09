@@ -1,37 +1,40 @@
-import RootStore from './HeroesStore';
+import RootStore from './CharactersStore';
 import {v4} from "uuid";
 
 const valuesFromSessionStorage = {
-    heroTypes: () => {
+    characterTypes: () => {
         try {
-            const sessionStorageHeroTypes = sessionStorage.getItem('heroTypes');
-            if (sessionStorageHeroTypes !== null)
-                return JSON.parse(sessionStorageHeroTypes);
+            const sessionStorageCharacterTypes = sessionStorage.getItem('characterTypes');
+            if (sessionStorageCharacterTypes !== null)
+                return JSON.parse(sessionStorageCharacterTypes);
         } catch (e) {
-            console.error('Error getting hero types from local storage', e);
+            console.error('Error getting character types from local storage', e);
         }
         return undefined;
     },
-    heroes: () => {
+    character: () => {
         try {
-            const sessionStorageHeroes = sessionStorage.getItem('heroes');
-            if (sessionStorageHeroes !== null)
-                return JSON.parse(sessionStorageHeroes);
+            const sessionStorageCharacter = sessionStorage.getItem('character');
+            if (sessionStorageCharacter !== null)
+                return JSON.parse(sessionStorageCharacter);
         } catch (e) {
-            console.error('Error getting heroes from local storage', e);
+            console.error('Error getting character from local storage', e);
         }
         return undefined;
     }
 } as const;
 export const initialStoreValues = {
     isMobile: false,
-    selectedHeroId: '',
+    selectedCharacterId: '',
     modals: {
-        addHero: {visible: false, title: 'Add Hero'},
-        heroDetails: {visible: false, title: ''},
+        addCharacter: {visible: false, title: 'Add Character'},
+        characterDetails: {visible: false, title: ''},
     },
-    heroes: valuesFromSessionStorage.heroes(),
-    heroTypes: valuesFromSessionStorage.heroTypes() ?? [{id: v4(), name: 'Hero'}, {id: v4(), name: 'Villain'}],
+    character: valuesFromSessionStorage.character(),
+    characterTypes: valuesFromSessionStorage.characterTypes() ?? [{id: v4(), name: 'Character'}, {
+        id: v4(),
+        name: 'Villain'
+    }],
     loading: true,
     notification: {
         isVisible: false,

@@ -3,12 +3,14 @@ import {Box, BoxProps, FormHelperText, MenuItem, Select, TextField, Typography, 
 import {styled} from '@mui/material/styles';
 import {useRef} from 'react';
 import {useForm} from 'react-hook-form';
+import * as z from 'zod';
 import Store from '../../store';
-import {HeroSchema, IHero, IHeroType} from '../../types';
-import HeroAvatar from "../hero/HeroAvatar";
+import {CharacterSchema, CreateCharacterType, ICharacterType} from '../../types';
+import {v4} from 'uuid';
+import CharacterAvatar from "../character/CharacterAvatar";
 import Button from "../Button";
 
-const StyledUpdateHeroView = styled(Box)<BoxProps>(({theme}) => ({
+const StyledAddCharacterView = styled(Box)<BoxProps>(({theme}) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(2),
@@ -36,47 +38,52 @@ const StyledFieldContainer = styled(Box)<BoxProps>(({theme}) => ({
     gap: theme.spacing(1),
     width: '100%',
 }));
+const CreateCharacterSchema = z.object({
+    fullName: z.string({required_error: 'Required'}).min(1, {message: 'Required'}),
+    avatarUrl: z.string(),
+    typeId: z.string({required_error: 'Required'}).min(1, {message: 'Required'}),
+    description: z.string(),
+});
 
-const UpdateHeroView = () => {
+type CreateCharacterSchemaType = z.infer<typeof CreateCharacterSchema>;
+
+const AddCharacterView = () => {
     const {
         register,
         handleSubmit,
         formState: {errors},
-    } = useForm<IHero>({
-        resolver: zodResolver(HeroSchema),
+    } = useForm<CreateCharacterSchemaType>({
+        resolver: zodResolver(CreateCharacterSchema),
         reValidateMode: 'onBlur',
         mode: 'onBlur',
-        values: Store.modals.updateHero.heroToUpdate
     });
-    console.log(Store.modals.updateHero.heroToUpdate)
     const typeRef = useRef<HTMLSelectElement>(null);
-    const handleUpdateHero = async (heroToUpdate: IHero) => {
-        try {
-            console.log(`UpdateHeroView.tsx - handleUpdateHero`, heroToUpdate)
-            Store.notification.show('Adding hero ...');
-            // const createdHero: IHero | undefined = await HeroApiRequests.createHero(heroToCreate);
-            const heroType = Store.heroTypes.find((type) => type.id === heroToUpdate.type.id)
-            if (!heroType) {
-                console.error('Hero type not found!');
-            }
-            const updatedHero = HeroSchema.parse(heroToUpdate);
-            Store.updateHero(updatedHero);
-            Store.setSelectedHero(updatedHero.id);
-            setTimeout(() => {
-                Store.notification.show('Hero updated successfully!', 'success')
-                Store.modals.updateHero.setVisibility(false);
-            }, 1500)
-        } catch (e) {
-            Store.notification.show('An error occurred while updating hero', 'error');
+    const handleAddCharacter = async (characterToCreate: CreateCharacterType) => {
+        Store.notification.show('Adding character ...');
+        // const createdCharacter: ICharacter | undefined = await CharacterApiRequests.createCharacter(characterToCreate);
+        const characterType = Store.characterTypes.find((type) => type.id === characterToCreate.typeId)
+        if (!characterType) {
+            console.error('Character type not found!');
         }
+        const createdCharacter = CharacterSchema.parse({
+            id: v4(),
+            type: characterType,
+            ...characterToCreate
+        })
+        Store.addCharacter(createdCharacter);
+        Store.setSelectedCharacter(createdCharacter.id);
+        setTimeout(() => {
+            Store.notification.show('Character Added successfully', 'success')
+            Store.modals.addCharacter.setVisibility(false);
+        }, 1500)
     };
 
     return (
-        <StyledUpdateHeroView
+        <StyledAddCharacterView
             component={'form'}
-            onSubmit={handleSubmit(submitHero => handleUpdateHero(submitHero))}
+            onSubmit={handleSubmit(submitCharacter => handleAddCharacter(submitCharacter))}
         >
-            <HeroAvatar
+            <CharacterAvatar
                 src={
                     'https://robohash.org/cade94edf5541f8cf5c03efda775f471?set=set1&bgset=&size=400x400'
                 }
@@ -113,10 +120,10 @@ const UpdateHeroView = () => {
                 <StyledLabel variant={'body2'}>Type</StyledLabel>
                 <Select
                     inputRef={typeRef}
-                    defaultValue={Store.modals.updateHero.heroToUpdate?.type.id ?? ''}
-                    {...register('type.id', {required: true})}
+                    defaultValue={''}
+                    {...register('typeId', {required: true})}
                 >
-                    {Store.heroTypes.map((type: IHeroType) => (
+                    {Store.characterTypes.map((type: ICharacterType) => (
                         <MenuItem
                             key={type.id}
                             value={type.id}
@@ -130,10 +137,10 @@ const UpdateHeroView = () => {
                         </MenuItem>
                     ))}
                 </Select>
-                {Boolean(errors.type?.id?.message) && (
-                    <FormHelperText error={Boolean(errors.type?.id?.message)}>
+                {Boolean(errors.typeId?.message) && (
+                    <FormHelperText error={Boolean(errors.typeId?.message)}>
                         <Typography variant={'body2'} component={'span'}>
-                            {errors.type?.id?.message}
+                            {errors.typeId?.message}
                         </Typography>
                     </FormHelperText>
                 )}
@@ -163,10 +170,10 @@ const UpdateHeroView = () => {
                 fullWidth
                 disabled={Object.keys(errors).length > 0}
             >
-                Save Hero
+                Save Character
             </Button>
-        </StyledUpdateHeroView>
+        </StyledAddCharacterView>
     )
 };
 
-export default UpdateHeroView;
+export default AddCharacterView;

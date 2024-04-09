@@ -9,7 +9,7 @@ import ErrorPage from './components/ErrorPage';
 import Loader from './components/Loader';
 import Modals from './components/modal/Modals';
 import Store from './store';
-import HeroesList from "./components/HeroesList";
+import CharacterList from "./components/CharacterList";
 import './App.css'
 
 const StyledApp = styled(Box)<BoxProps>(({theme}) => ({
@@ -40,7 +40,7 @@ const App = () => {
 
     return (<StyledApp>
         <Typography variant={'h1'} color={'#65cd95'} align={'center'}>
-            Heroes App
+            Character App
         </Typography>
         {!showErrorPage ? (<>
             <Snackbar
@@ -68,12 +68,12 @@ const App = () => {
                     activeBgColor={'#3e815d'}
                     fullWidth
                     onClick={() => {
-                        Store.modals.addHero.setVisibility(true);
+                        Store.modals.addCharacter.setVisibility(true);
                     }}
                     sx={{mb: isMobileView ? 4 : 9}}
                     startIcon={<AddIcon/>}
                 >
-                    Add Hero
+                    Add Character
                 </Button>
                 <Button
                     variant="outlined"
@@ -82,14 +82,14 @@ const App = () => {
                     activeBgColor={'#3e815d'}
                     fullWidth
                     onClick={() => {
-                        Store.modals.addHeroType.setVisibility(true);
+                        Store.modals.addCharacterType.setVisibility(true);
                     }}
                     sx={{mb: isMobileView ? 4 : 9}}
                     startIcon={<AddIcon/>}
                 >
-                    Add hero type
+                    Add character type
                 </Button>
-                <HeroesList/>
+                <CharacterList/>
                 <Modals/>
             </>)}
         </>) : (<ErrorPage/>)}

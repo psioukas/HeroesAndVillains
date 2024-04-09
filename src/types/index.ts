@@ -1,13 +1,13 @@
 import {z} from "zod";
 
-export const HeroTypeSchema = z.object({
+export const CharacterTypeSchema = z.object({
     id: z.string(),
     name: z.string(),
 });
 
-export type IHeroType = z.infer<typeof HeroTypeSchema>;
+export type ICharacterType = z.infer<typeof CharacterTypeSchema>;
 
-    export const HeroSchema = z.object({
+export const CharacterSchema = z.object({
     id: z.string(),
     fullName: z.string(),
     avatarUrl: z.string(),
@@ -18,13 +18,13 @@ export type IHeroType = z.infer<typeof HeroTypeSchema>;
     }),
 })
 
-export type IHero = z.infer<typeof HeroSchema>;
+export type ICharacter = z.infer<typeof CharacterSchema>;
 
-export type CreateHeroType = Omit<IHero, 'type' | 'id'> & {
+export type CreateCharacterType = Omit<ICharacter, 'type' | 'id'> & {
     typeId: string;
 };
 
-export interface IHeroesListResponse {
-    data: IHero[];
+export interface ICharacterListResponse {
+    data: ICharacter[];
     totalCount: number;
 }

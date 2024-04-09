@@ -2,10 +2,10 @@ import {Box, BoxProps, Typography} from '@mui/material';
 import {styled, useTheme} from '@mui/material/styles';
 import {observer} from 'mobx-react-lite';
 import Store from '../store';
-import {IHero} from '../types';
-import HeroListItem from './hero/HeroListItem';
+import {ICharacter} from '../types';
+import CharacterListItem from './character/CharacterListItem';
 
-const StyledHeroesList = styled(Box)<IHeroesList>(({theme}) => ({
+const StyledCharacterList = styled(Box)<ICharacterList>(({theme}) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
@@ -22,25 +22,25 @@ const StyledHeroesList = styled(Box)<IHeroesList>(({theme}) => ({
         height: `calc(100% - ${theme.spacing(40)})`,
     },
 }));
-const StyledHeroesListHeader = styled(Box)<IHeroesList>(({theme}) => ({
+const StyledCharacterListHeader = styled(Box)<ICharacterList>(({theme}) => ({
     display: 'flex',
     marginLeft: theme.spacing(4),
     marginRight: theme.spacing(9),
     gap: theme.spacing(4),
 }));
 
-interface IHeroesList extends BoxProps {
+interface ICharacterList extends BoxProps {
 }
 
-const HeroesList = () => {
+const CharacterList = () => {
     const theme = useTheme();
 
-    const heroes = Store.heroes;
+    const character = Store.character;
     return (
         <>
-            {heroes.length > 0 ? (<>
+            {character.length > 0 ? (<>
                         {!Store.isMobile && (
-                            <StyledHeroesListHeader>
+                            <StyledCharacterListHeader>
                                 <Box
                                     style={{
                                         width: theme.spacing(11.25),
@@ -48,7 +48,7 @@ const HeroesList = () => {
                                     }}
                                 />
                                 <Typography variant="body1" flex={4}>
-                                    Hero
+                                    Character
                                 </Typography>
                                 <Typography variant="body1" flex={3}>
                                     Type
@@ -56,18 +56,19 @@ const HeroesList = () => {
                                 <Typography variant="body1" flex={4}>
                                     Description
                                 </Typography>
-                            </StyledHeroesListHeader>
+                            </StyledCharacterListHeader>
                         )}
 
-                        <StyledHeroesList>
-                            {heroes.map((hero: IHero) => <HeroListItem key={hero.id} hero={hero}/>)}
-                        </StyledHeroesList>
+                        <StyledCharacterList>
+                            {character.map((character: ICharacter) => <CharacterListItem key={character.id}
+                                                                                         character={character}/>)}
+                        </StyledCharacterList>
                     </>
 
                 ) :
                 <Box width={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
                     <Typography>
-                        No heroes found!
+                        No character found!
                     </Typography>
                 </Box>
             }
@@ -76,4 +77,4 @@ const HeroesList = () => {
     );
 };
 
-export default observer(HeroesList);
+export default observer(CharacterList);

@@ -3,10 +3,10 @@ import {Box, BoxProps, IconButton, Modal, Paper, PaperProps, SvgIconProps, Typog
 import {styled} from '@mui/material/styles';
 import {observer} from 'mobx-react-lite';
 import Store from '../../store';
-import AddHeroView from './AddHeroView';
-import HeroDetailsView from './HeroDetailsView';
-import AddHeroTypeView from "./AddHeroTypeView.tsx";
-import UpdateHeroView from "./UpdateHeroView.tsx";
+import AddCharacterView from './AddCharacterView';
+import CharacterDetailsView from './CharacterDetailsView';
+import AddCharacterTypeView from "./AddCharacterTypeView.tsx";
+import UpdateCharacterView from "./UpdateCharacterView.tsx";
 
 const StyledModalBody = styled(Paper)<PaperProps>(({theme}) => ({
     position: 'absolute',
@@ -75,10 +75,10 @@ const Modals = () => {
                     </StyledIconButton>
                 </StyledModalHeader>
                 <StyledModalContent>
-                    {Store.modals.addHero.visible && <AddHeroView/>}
-                    {Store.modals.addHeroType.visible && <AddHeroTypeView/>}
-                    {Store.modals.updateHero.visible && <UpdateHeroView/>}
-                    {Store.modals.heroDetails.visible && <HeroDetailsView/>}
+                    {Store.modals.addCharacter.visible && <AddCharacterView/>}
+                    {Store.modals.addCharacterType.visible && <AddCharacterTypeView/>}
+                    {Store.modals.updateCharacter.visible && <UpdateCharacterView/>}
+                    {Store.modals.characterDetails.visible && <CharacterDetailsView/>}
                 </StyledModalContent>
             </StyledModalBody>
         </Modal>
