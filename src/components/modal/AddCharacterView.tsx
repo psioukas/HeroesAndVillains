@@ -95,7 +95,7 @@ const AddCharacterView = () => {
         Store.setSelectedCharacter(createdCharacter.id)
         setTimeout(() => {
             Store.notification.show('Character Added successfully', 'success')
-            Store.modals.addCharacter.setVisibility(false)
+            Store.modals.character.add.setVisibility(false)
         }, 1500)
     }
 

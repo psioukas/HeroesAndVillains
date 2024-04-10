@@ -73,7 +73,7 @@ const AddCharacterTypeView = () => {
                     'Character Added successfully',
                     'success'
                 )
-                Store.modals.addCharacterType.setVisibility(false)
+                Store.modals.character.addType.setVisibility(false)
             }, 1500)
         } else {
             Store.notification.show('Something went wrong', 'error')

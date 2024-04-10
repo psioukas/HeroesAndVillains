@@ -85,7 +85,7 @@ const CharacterListItem: React.FC<{ character: ICharacter }> = ({
                 }
                 break
             case 'update':
-                Store.modals.updateCharacter(character)
+                Store.editCharacter(character)
                 break
         }
         setOpenItemContextMenu(false)

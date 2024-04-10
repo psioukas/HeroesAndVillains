@@ -52,31 +52,36 @@ const Character = types.model('Character', {
 
 const Modals = types
     .model('Modals', {
-        addCharacter: types.optional(Modal, {
-            visible: false,
-            title: 'Add character',
-        }),
-        updateCharacter: types.optional(
-            types.compose(
-                Modal,
-                types.model({
-                    characterToUpdate: types.maybe(types.reference(Character)),
-                })
-            ),
-            {
+        character: types.model({
+            add: types.optional(Modal, {
                 visible: false,
-                title: 'Update character',
-                characterToUpdate: undefined,
-            }
-        ),
-        addCharacterType: types.optional(Modal, {
-            visible: false,
-            title: 'Add character type',
+                title: 'Add character',
+            }),
+            update: types.optional(
+                types.compose(
+                    Modal,
+                    types.model({
+                        characterToUpdate: types.maybe(
+                            types.reference(Character)
+                        ),
+                    })
+                ),
+                {
+                    visible: false,
+                    title: 'Update character',
+                    characterToUpdate: undefined,
+                }
+            ),
+            addType: types.optional(Modal, {
+                visible: false,
+                title: 'Add character type',
+            }),
+            showDetails: types.optional(Modal, {
+                visible: false,
+                title: 'Character details',
+            }),
         }),
-        characterDetails: types.optional(Modal, {
-            visible: false,
-            title: 'Character details',
-        }),
+
         confirmationModal: types.optional(Modal, { visible: false, title: '' }),
     })
     .views((self) => ({
@@ -92,19 +97,24 @@ const Modals = types
         },
         get isAnyModalOpen(): boolean {
             type ModalsType = typeof self
-            return Object.keys(self).some(
-                (key: string) => self[key as keyof ModalsType].visible
+            type CharacterModals = typeof self.character
+
+            return (
+                Object.keys(self).some(
+                    (key: string) => self[key as keyof ModalsType].visible
+                ) ||
+                Object.keys(self.character).some(
+                    (key) =>
+                        self.character[key as keyof CharacterModals].visible
+                )
             )
         },
     }))
     .actions((self) => ({
-        updateCharacter: (character: ICharacter) => {
-            self.updateCharacter.visible = true
-            self.updateCharacter.characterToUpdate = character
-        },
         closeOpenModal: () => {
             if (self.isAnyModalOpen) {
                 type ModalsType = typeof self
+                type CharacterModalsType = typeof self.character
                 const root = rootOf(self)
 
                 Object.keys(self)
@@ -114,13 +124,30 @@ const Modals = types
                     .forEach((key) => {
                         const isVisible = self[key as keyof ModalsType].visible
                         if (isVisible) {
+                            self[key as keyof ModalsType].visible = false
+                        }
+                    })
+
+                Object.keys(self.character)
+                    .filter(
+                        (key) =>
+                            self.character[key as keyof CharacterModalsType]
+                                .visible
+                    )
+                    .forEach((key) => {
+                        const isVisible =
+                            self.character[key as keyof CharacterModalsType]
+                                .visible
+                        if (isVisible) {
+                            self.character[
+                                key as keyof CharacterModalsType
+                            ].visible = false
                             if (
-                                key === 'characterDetails' &&
+                                key === 'showDetails' &&
                                 root.selectedCharacterId.trim()
                             ) {
                                 root.clearSelectedCharacter()
                             }
-                            self[key as keyof ModalsType].visible = false
                         }
                     })
             }
@@ -131,7 +158,15 @@ const RootStore = types
     .model('Store', {
         isMobile: types.optional(types.boolean, false),
         loading: types.optional(types.boolean, true),
-        modals: Modals,
+        modals: types.optional(Modals, {
+            confirmationModal: { visible: false, title: '' },
+            character: {
+                update: { visible: false, title: '' },
+                add: { visible: false, title: '' },
+                addType: { visible: false, title: '' },
+                showDetails: { visible: false, title: '' },
+            },
+        }),
         characters: types.optional(types.array(Character), []),
         characterTypes: types.optional(types.array(CharacterType), [
             { id: v4(), name: 'Character' },
@@ -180,7 +215,10 @@ const RootStore = types
         },
         addCharacter: (character: ICharacter) => {
             self.characters.push(character)
-            sessionStorage.setItem('character', JSON.stringify(self.characters))
+            sessionStorage.setItem(
+                'characters',
+                JSON.stringify(self.characters)
+            )
             self.modals.closeOpenModal()
         },
         createCharacterType: (characterType: ICharacterType) => {
@@ -201,8 +239,15 @@ const RootStore = types
         deleteCharacter: (character?: ICharacter) => {
             if (!character) return
             self.characters.remove(character)
-            sessionStorage.setItem('character', JSON.stringify(self.characters))
+            sessionStorage.setItem(
+                'characters',
+                JSON.stringify(self.characters)
+            )
             self.modals.closeOpenModal()
+        },
+        editCharacter: (character: ICharacter) => {
+            self.modals.character.update.visible = true
+            self.modals.character.update.characterToUpdate = character
         },
         updateCharacter: (updatedCharacter: ICharacter) => {
             const character = self.characters.find(
@@ -225,7 +270,7 @@ const RootStore = types
             ) {
                 rootOf(self).setSelectedCharacter(characterId)
                 self.modals.closeOpenModal()
-                self.modals.characterDetails.setVisibility(true)
+                self.modals.character.showDetails.setVisibility(true)
             }
         },
         clearSelectedCharacter: () => {

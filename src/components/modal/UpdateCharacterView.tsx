@@ -55,9 +55,9 @@ const UpdateCharacterView = () => {
         resolver: zodResolver(CharacterSchema),
         reValidateMode: 'onBlur',
         mode: 'onBlur',
-        values: Store.modals.updateCharacter.characterToUpdate,
+        values: Store.modals.character.update.characterToUpdate,
     })
-    console.log(Store.modals.updateCharacter.characterToUpdate)
+    console.log(Store.modals.character.update.characterToUpdate)
     const typeRef = useRef<HTMLSelectElement>(null)
     const handleUpdateCharacter = async (characterToUpdate: ICharacter) => {
         try {
@@ -88,7 +88,7 @@ const UpdateCharacterView = () => {
                 'error'
             )
         } finally {
-            Store.modals.updateCharacter.setVisibility(false)
+            Store.modals.character.update.setVisibility(false)
         }
     }
 
@@ -137,7 +137,7 @@ const UpdateCharacterView = () => {
                 <Select
                     inputRef={typeRef}
                     defaultValue={
-                        Store.modals.updateCharacter.characterToUpdate?.type
+                        Store.modals.character.update.characterToUpdate?.type
                             .id ?? ''
                     }
                     {...register('type.id', { required: true })}

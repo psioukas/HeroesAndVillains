@@ -28,10 +28,6 @@ const valuesFromSessionStorage = {
 export const initialStoreValues = {
     isMobile: false,
     selectedCharacterId: '',
-    modals: {
-        addCharacter: { visible: false, title: 'Add Character' },
-        characterDetails: { visible: false, title: '' },
-    },
     character: valuesFromSessionStorage.characters(),
     characterTypes: valuesFromSessionStorage.characterTypes() ?? [
         { id: v4(), name: 'Character' },

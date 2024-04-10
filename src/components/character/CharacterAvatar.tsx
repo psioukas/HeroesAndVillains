@@ -28,15 +28,21 @@ const CharacterAvatar = ({ src, alt, ...props }: ICharacterAvatar) => {
 
     return (
         <StyledImageContainer {...props}>
-            {loading && <CircularProgress size={'10'} color={'primary'} />}
+            {loading && (
+                <CircularProgress
+                    size={'10'}
+                    color={'primary'}
+                    sx={{ display: 'block' }}
+                />
+            )}
             <img
                 src={imgUrl}
                 onLoad={() => {
-                    setTimeout(() => setLoading(false), 1000)
+                    setTimeout(() => setLoading(false), 450)
                 }}
                 onError={() => {
                     setImgUrl('https://via.placeholder.com/150')
-                    setLoading(false)
+                    setTimeout(() => setLoading(false), 450)
                 }}
                 style={{ display: loading ? 'none' : 'inline-block' }}
                 alt={alt ?? 'character avatar'}

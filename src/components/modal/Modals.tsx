@@ -86,14 +86,14 @@ const Modals = () => {
                     </StyledIconButton>
                 </StyledModalHeader>
                 <StyledModalContent>
-                    {Store.modals.addCharacter.visible && <AddCharacterView />}
-                    {Store.modals.addCharacterType.visible && (
+                    {Store.modals.character.add.visible && <AddCharacterView />}
+                    {Store.modals.character.addType.visible && (
                         <AddCharacterTypeView />
                     )}
-                    {Store.modals.updateCharacter.visible && (
+                    {Store.modals.character.update.visible && (
                         <UpdateCharacterView />
                     )}
-                    {Store.modals.characterDetails.visible && (
+                    {Store.modals.character.showDetails.visible && (
                         <CharacterDetailsView />
                     )}
                 </StyledModalContent>

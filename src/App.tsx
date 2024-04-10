@@ -95,7 +95,7 @@ const App = () => {
                                 activeBgColor={'#3e815d'}
                                 fullWidth
                                 onClick={() => {
-                                    Store.modals.addCharacter.setVisibility(
+                                    Store.modals.character.add.setVisibility(
                                         true
                                     )
                                 }}
@@ -111,7 +111,7 @@ const App = () => {
                                 activeBgColor={'#3e815d'}
                                 fullWidth
                                 onClick={() => {
-                                    Store.modals.addCharacterType.setVisibility(
+                                    Store.modals.character.addType.setVisibility(
                                         true
                                     )
                                 }}
