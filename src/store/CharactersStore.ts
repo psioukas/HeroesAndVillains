@@ -215,15 +215,12 @@ const RootStore = types
         },
         addCharacter: (character: ICharacter) => {
             self.characters.push(character)
-            sessionStorage.setItem(
-                'characters',
-                JSON.stringify(self.characters)
-            )
+            localStorage.setItem('characters', JSON.stringify(self.characters))
             self.modals.closeOpenModal()
         },
         createCharacterType: (characterType: ICharacterType) => {
             self.characterTypes.push(characterType)
-            sessionStorage.setItem(
+            localStorage.setItem(
                 'characterTypes',
                 JSON.stringify(self.characterTypes)
             )
@@ -231,7 +228,7 @@ const RootStore = types
         deleteCharacterType: (characterType?: ICharacterType) => {
             if (!characterType) return
             self.characterTypes.remove(characterType)
-            sessionStorage.setItem(
+            localStorage.setItem(
                 'characterTypes',
                 JSON.stringify(self.characterTypes)
             )
@@ -239,10 +236,7 @@ const RootStore = types
         deleteCharacter: (character?: ICharacter) => {
             if (!character) return
             self.characters.remove(character)
-            sessionStorage.setItem(
-                'characters',
-                JSON.stringify(self.characters)
-            )
+            localStorage.setItem('characters', JSON.stringify(self.characters))
             self.modals.closeOpenModal()
         },
         editCharacter: (character: ICharacter) => {
@@ -255,10 +249,7 @@ const RootStore = types
             )
             if (!character) return
             applySnapshot(character, updatedCharacter)
-            sessionStorage.setItem(
-                'characters',
-                JSON.stringify(self.characters)
-            )
+            localStorage.setItem('characters', JSON.stringify(self.characters))
             self.modals.closeOpenModal()
         },
         setSelectedCharacter: (characterId: string) => {

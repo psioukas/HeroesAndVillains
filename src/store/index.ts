@@ -1,13 +1,13 @@
 import RootStore from './CharactersStore'
 import { v4 } from 'uuid'
 
-const valuesFromSessionStorage = {
+const valuesFromLocalStorage = {
     characterTypes: () => {
         try {
-            const sessionStorageCharactersTypes =
-                sessionStorage.getItem('characterTypes')
-            if (sessionStorageCharactersTypes !== null)
-                return JSON.parse(sessionStorageCharactersTypes)
+            const localStorageCharactersTypes =
+                localStorage.getItem('characterTypes')
+            if (localStorageCharactersTypes !== null)
+                return JSON.parse(localStorageCharactersTypes)
         } catch (e) {
             console.error('Error getting character types from local storage', e)
         }
@@ -15,10 +15,9 @@ const valuesFromSessionStorage = {
     },
     characters: () => {
         try {
-            const sessionStorageCharacters =
-                sessionStorage.getItem('characters')
-            if (sessionStorageCharacters !== null)
-                return JSON.parse(sessionStorageCharacters)
+            const localStorageCharacters = localStorage.getItem('characters')
+            if (localStorageCharacters !== null)
+                return JSON.parse(localStorageCharacters)
         } catch (e) {
             console.error('Error getting character from local storage', e)
         }
@@ -28,8 +27,8 @@ const valuesFromSessionStorage = {
 export const initialStoreValues = {
     isMobile: false,
     selectedCharacterId: '',
-    characters: valuesFromSessionStorage.characters(),
-    characterTypes: valuesFromSessionStorage.characterTypes() ?? [
+    characters: valuesFromLocalStorage.characters(),
+    characterTypes: valuesFromLocalStorage.characterTypes() ?? [
         { id: v4(), name: 'Character' },
         {
             id: v4(),
