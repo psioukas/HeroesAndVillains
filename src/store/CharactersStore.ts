@@ -255,7 +255,10 @@ const RootStore = types
             )
             if (!character) return
             applySnapshot(character, updatedCharacter)
-            sessionStorage.setItem('character', JSON.stringify(self.characters))
+            sessionStorage.setItem(
+                'characters',
+                JSON.stringify(self.characters)
+            )
             self.modals.closeOpenModal()
         },
         setSelectedCharacter: (characterId: string) => {

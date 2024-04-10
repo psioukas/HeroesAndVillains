@@ -28,7 +28,7 @@ const valuesFromSessionStorage = {
 export const initialStoreValues = {
     isMobile: false,
     selectedCharacterId: '',
-    character: valuesFromSessionStorage.characters(),
+    characters: valuesFromSessionStorage.characters(),
     characterTypes: valuesFromSessionStorage.characterTypes() ?? [
         { id: v4(), name: 'Character' },
         {
