@@ -29,11 +29,8 @@ export const initialStoreValues = {
     selectedCharacterId: '',
     characters: valuesFromLocalStorage.characters(),
     characterTypes: valuesFromLocalStorage.characterTypes() ?? [
-        { id: v4(), name: 'Character' },
-        {
-            id: v4(),
-            name: 'Villain',
-        },
+        { id: v4(), name: 'Hero' },
+        { id: v4(), name: 'Villain' },
     ],
     loading: true,
     notification: {
