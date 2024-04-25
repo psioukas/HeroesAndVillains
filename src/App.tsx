@@ -20,6 +20,7 @@ import Modals from './components/modal/Modals'
 import Store from './store'
 import CharacterList from './components/CharacterList'
 import './App.css'
+import { getCharacters } from './utils/marvel-api/getCharacters.ts'
 
 const StyledApp = styled(Box)<BoxProps>(({ theme }) => ({
     background: theme.palette.background.default,
@@ -43,6 +44,7 @@ const App = () => {
     )
 
     useEffect(() => {
+        getCharacters()
         setTimeout(() => {
             Store.setLoading()
         }, 2000)
