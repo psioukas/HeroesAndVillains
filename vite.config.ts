@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '')
     return {
-        base: '/',
+        base: '/character-app',
         define: {
             'process.env.REACT_APP_API_BASE_URL': JSON.stringify(
                 env.REACT_APP_API_BASE_URL
