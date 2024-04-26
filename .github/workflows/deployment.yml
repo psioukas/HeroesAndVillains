@@ -45,6 +45,10 @@ jobs:
               run: npm ci
             - name: Build
               run: npm run build
+              env:
+                REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }}
+                PORT: ${{ secrets.PORT }}
+                MARVEL_API_KEY: ${{ secrets.MARVEL_API_KEY }}
             - name: Setup Pages
               uses: actions/configure-pages@v4
             - name: Upload artifact

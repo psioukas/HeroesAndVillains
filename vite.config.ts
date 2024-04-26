@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => {
             'process.env.REACT_APP_API_BASE_URL': JSON.stringify(
                 env.REACT_APP_API_BASE_URL
             ),
+            'process.env.MARVEL_API_KEY': JSON.stringify(env.MARVEL_API_KEY),
         },
         plugins: [react()],
     }
